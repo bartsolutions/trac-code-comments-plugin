@@ -159,6 +159,8 @@ class CommentJSONEncoder(json.JSONEncoder):
             for_json = dict([(name, getattr(o, name)) for name in o.__dict__ if isinstance(getattr(o, name), (basestring, int, list, dict))])
             for_json['formatted_date'] = o.formatted_date()
             for_json['permalink'] = o.href()
+            for_json['id'] = o.id
+            for_json['line'] = o.line
             return for_json
         else:
             return json.JSONEncoder.default(self, o)
