@@ -4,7 +4,7 @@ from trac.env import IEnvironmentSetupParticipant
 from trac.db.api import DatabaseManager
 
 # Database version identifier for upgrades.
-db_version = 3
+db_version = 4
 
 # Database schema
 schema = {
@@ -102,9 +102,15 @@ def upgrade_from_2_to_3(env, db):
             cursor.execute(stmt)
 
 
+def upgrade_from_3_to_4(env, db):
+    #user is expected to manually modify the DB to adapt to v4 (add column of 
+    #repository, and change revision to text)
+    pass
+
 upgrade_map = {
     2: upgrade_from_1_to_2,
     3: upgrade_from_2_to_3,
+    4: upgrade_from_3_to_4,
 }
 
 

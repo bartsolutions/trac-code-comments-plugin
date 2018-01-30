@@ -48,7 +48,7 @@ class MainNavigation(CodeComments):
         return self.href
 
     def get_navigation_items(self, req):
-        if 'TRAC_ADMIN' in req.perm:
+        if 'TICKET_CREATE' in req.perm:
             yield 'mainnav', 'code-comments', Markup('<a href="%s">Code Comments</a>' % (
                      req.href(self.href) ) )
 
@@ -73,7 +73,7 @@ class JSDataForRequests(CodeComments):
             'templates': self.templates_js_data(),
             'active_comment_id': req.args.get('codecomment'),
             'username': req.authname,
-            'is_admin': 'TRAC_ADMIN' in req.perm,
+            'is_admin': 'TICKET_CREATE' in req.perm,
         }
 
         original_return_value = template, data, content_type
@@ -129,7 +129,7 @@ class ListComments(CodeComments):
         return req.path_info == '/' + self.href
 
     def process_request(self, req):
-        req.perm.require('TRAC_ADMIN')
+        req.perm.require('TICKET_CREATE')
 
         self.data = {}
         self.args = {}
@@ -145,7 +145,7 @@ class ListComments(CodeComments):
         self.comments = Comments(req, self.env);
         self.data['comments'] = self.comments.search(self.args, self.order, self.per_page, self.page, self.order_by)
         self.data['reponame'], repos, path = RepositoryManager(self.env).get_repository_by_path('/')
-        self.data['can_delete'] = 'TRAC_ADMIN' in req.perm
+        self.data['can_delete'] = 'TICKET_CREATE' in req.perm
         self.data['paginator'] = self.get_paginator()
         self.data['current_sorting_method'] = self.order_by
         self.data['current_order'] = self.order
@@ -218,7 +218,7 @@ class DeleteCommentForm(CodeComments):
         return req.path_info == '/' + self.href
 
     def process_request(self, req):
-        req.perm.require('TRAC_ADMIN')
+        req.perm.require('TICKET_CREATE')
         if 'GET' == req.method:
             return self.form(req)
         else:
