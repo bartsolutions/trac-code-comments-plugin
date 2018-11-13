@@ -74,8 +74,12 @@ class Comment(object):
             href = self.req.href.browser(self.path, rev=self.revision,
                                          codecomment=self.id)
         elif self.is_comment_to_changeset:
-            href = self.req.href.changeset(self.revision, self.path, 
-                                           codecomment=self.id)
+            if self.path.find("/") < 0: #for legacy comments
+                href = self.req.href.changeset(self.revision, self.path, 
+                                               codecomment=self.id)
+            else:   #full path stored
+                href = self.path + '&codecomment=' + str(self.id)
+
         elif self.is_comment_to_attachment:
             href = self.req.href('/attachment/ticket/%d/%s'
                                  % (self.attachment_ticket,

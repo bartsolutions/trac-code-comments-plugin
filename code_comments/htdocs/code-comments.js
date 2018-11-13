@@ -138,7 +138,8 @@ var underscore = _.noConflict();
 			'click button': 'showAddCommentDialog'
 		},
 		render: function() {
-			$( this.el ).html( this.template( { colspan: Rows.getNumberOfTHsPerRow() } ) );
+            var colspan = Rows.getNumberOfTHsPerRow();
+			$( this.el ).html( this.template( { colspan: colspan } ) );
 			this.$('button').button();
 			return this;
 		},
@@ -196,6 +197,9 @@ var underscore = _.noConflict();
 				title += ( displayLine ? 'line ' + displayLine + ' of ' : '' )
 				      + this.path + '@' + CodeComments.revision;
 			}
+
+            title = title.substring(0,50) + ' ...';
+
 			return title;
 		},
 		close: function() {
@@ -281,7 +285,10 @@ var underscore = _.noConflict();
 			return this.$rows.hover( enter, leave );
 		},
 		getNumberOfTHsPerRow: function() {
-			return this.$rows.eq( 0 ).find( 'th' ).length;
+            var colspan;
+			var thCount = this.$rows.eq( 0 ).find( 'th' ).length;
+			var tdCount = this.$rows.eq( 0 ).find( 'td' ).length;
+            return thCount + tdCount;
 		}
 	} );
 
@@ -292,7 +299,7 @@ var underscore = _.noConflict();
 			this.$el = $( this.el );
 		},
 		replaceLineNumberCellContent: function( html ) {
-			this.$lineNumberCell.children().css( 'display', 'none' );
+		//	this.$lineNumberCell.children().css( 'display', 'none' );
 			this.$lineNumberCell.prepend( html );
 		},
 		bringBackOriginalLineNumberCellContent: function() {
